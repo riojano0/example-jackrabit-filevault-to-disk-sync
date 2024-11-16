@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'com.example.jackrabbit'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.jackrabbit:jackrabbit-core:2.22.0'
+    implementation 'org.apache.jackrabbit:jackrabbit-api:2.19.3'
+    implementation 'org.apache.jackrabbit:jackrabbit-jcr-commons:2.22.0'
+    implementation 'org.apache.jackrabbit:jackrabbit-jcr2spi:2.22.0'
+
+    implementation 'org.apache.jackrabbit.vault:org.apache.jackrabbit.vault:3.8.2'
+    implementation 'org.apache.jackrabbit.vault:vault-sync:3.8.2'
+
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
+    implementation 'org.apache.derby:derby:10.14.2.0'
+    implementation 'com.sparkjava:spark-core:2.9.4'
+    implementation 'com.google.code.gson:gson:2.10.1'
+}
+
+application {
+    mainClass = 'com.example.jackrabbit.Main'
+}

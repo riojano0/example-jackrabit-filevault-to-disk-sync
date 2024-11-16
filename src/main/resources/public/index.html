@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node Manager</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<h1>Node Manager</h1>
+
+<h2>Create Node</h2>
+<form id="createNodeForm">
+  <label for="createContent">Content:</label>
+  <input type="text" id="createContent" required>
+  <button type="submit">Create</button>
+</form>
+
+<h2>Nodes</h2>
+<button id="loadNodes">Load Nodes</button>
+<ul id="nodesList"></ul>
+
+<script>
+    document.getElementById('createNodeForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const content = document.getElementById('createContent').value;
+        try {
+            const response = await axios.post('/nodes', content, { headers: { 'Content-Type': 'text/plain' } });
+            alert(response.data);
+            document.getElementById('createContent').value = '';
+        } catch (error) {
+            alert('Error creating node: ' + error.response.data.error);
+        }
+    });
+
+    document.getElementById('updateNodeForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const name = document.getElementById('updateName').value;
+        const content = document.getElementById('updateContent').value;
+        try {
+            const response = await axios.put(`/nodes/${name}`, content, { headers: { 'Content-Type': 'text/plain' } });
+            alert(response.data);
+        } catch (error) {
+            alert('Error updating node: ' + error.response.data.error);
+        }
+    });
+
+    document.getElementById('loadNodes').addEventListener('click', async function () {
+        try {
+            const response = await axios.get('/nodes');
+            const nodes = response.data;
+            const nodesList = document.getElementById('nodesList');
+            nodesList.innerHTML = '';
+
+            nodes.forEach(node => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${node.name}: ${node.content || ''}`;
+
+                if (node.fileLink) {
+                    const link = document.createElement('a');
+                    link.href = node.fileLink;
+                    link.textContent = ' (Download File)';
+                    link.target = '_blank';
+                    listItem.appendChild(link);
+                }
+
+                nodesList.appendChild(listItem);
+            });
+        } catch (error) {
+            alert('Error loading nodes: ' + error.response.data.error);
+        }
+    });
+</script>
+</body>
+</html>
